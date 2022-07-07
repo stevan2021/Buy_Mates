@@ -1,3 +1,4 @@
+import 'package:buy_mate/screens/setup_profile/profile.dart';
 import 'package:flutter/material.dart';
 import 'package:buy_mate/constants/color.dart';
 import 'package:buy_mate/functions/next_page.dart';
@@ -49,7 +50,9 @@ class ProfilePage extends StatelessWidget {
         _menuCard(
             title: 'Edit Profile',
             icon: Icons.person_outline_rounded,
-            function: () {}),
+            function: () {
+              nextPage(context: context, widget: ProfileScreen());
+            }),
         _menuCard(
             title: 'Notification',
             icon: Icons.notifications_none_rounded,

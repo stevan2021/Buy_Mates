@@ -1,3 +1,4 @@
+import 'package:buy_mate/providers/bottom_navigation_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:buy_mate/providers/mate_provider.dart';
 import 'package:buy_mate/screens/loading_screen.dart';
@@ -12,8 +13,15 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return ChangeNotifierProvider(
-      create: (context) => MateProvider(),
+    return MultiProvider(
+      providers: [
+        ChangeNotifierProvider(
+          create: (context) => MateProvider(),
+        ),
+        ChangeNotifierProvider(
+          create: (context) => BottomNavigationProvider(),
+        ),
+      ],
       child: MaterialApp(
         theme: ThemeData(
           primaryColor: Colors.black,
