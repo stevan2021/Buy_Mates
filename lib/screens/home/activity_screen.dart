@@ -1,6 +1,5 @@
 import 'package:buy_mate/providers/bottom_navigation_provider.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_swipecards/flutter_swipecards.dart';
 import 'package:buy_mate/constants/color.dart';
 import 'package:buy_mate/functions/next_page.dart';
 import 'package:buy_mate/screens/home/allocation_screen.dart';
@@ -29,16 +28,12 @@ class _ActivityScreenState extends State<ActivityScreen> {
           id: '1',
           likes: 28,
           location: 'Rose Bay, Sydney',
-          image: 'asset/card_image.png',
+          image: [
+            'asset/card_image.png',
+            'asset/calculator.png',
+            'asset/card_image.png',
+          ],
           parking: 2));
-  final List<PeopleLiked> _peopleLiked = List.generate(
-    15,
-    (index) => PeopleLiked(
-        image: 'asset/heart.png',
-        name: 'Person $index',
-        subtitle: 'Some subtitle',
-        allocated: index % 2 == 0 ? 35 : null),
-  );
 
   late CardInfo _currentCard;
 
@@ -55,10 +50,12 @@ class _ActivityScreenState extends State<ActivityScreen> {
         SizedBox(
           height: MediaQuery.of(context).size.height * 0.68,
           child: Stack(
-            children: List.generate(_cardInfo.length,
-                    (index) => cardWithImage(context: context, index: index))
-                .reversed
-                .toList(),
+            children: List.generate(
+                _cardInfo.length,
+                (index) => CardWithImage(
+                      index: index,
+                      cardInfo: _cardInfo,
+                    )).reversed.toList(),
           ),
         ),
         const SizedBox(
@@ -114,131 +111,30 @@ class _ActivityScreenState extends State<ActivityScreen> {
       ],
     );
   }
+}
 
-  SizedBox cardWithImage({required BuildContext context, required int index}) {
-    return SizedBox(
-      child: Padding(
-        padding: EdgeInsets.only(
-            top: index == 0
-                ? 20
-                : index == 1
-                    ? 10
-                    : 0),
-        child: ClipRect(
-          clipBehavior: Clip.antiAliasWithSaveLayer,
-          child: Stack(
-            fit: StackFit.expand,
-            children: [
-              Image.asset(
-                _cardInfo[index].image,
-                fit: BoxFit.fill,
-              ),
-              Positioned(
-                top: 10,
-                left: 5,
-                child: IconButton(
-                  onPressed: () {
-                    showBottomSheetWidget(
-                        context: context, peopleLiked: _peopleLiked);
-                  },
-                  icon: Column(
-                    children: [
-                      const Flexible(
-                        child: Icon(
-                          Icons.remove_red_eye_outlined,
-                          size: 18,
-                        ),
-                      ),
-                      regularText(
-                          text: _cardInfo[index].likes.toString(),
-                          color: kBlackColor,
-                          size: 12)
-                    ],
-                  ),
-                ),
-              ),
-              Align(
-                alignment: Alignment.bottomCenter,
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.stretch,
-                  mainAxisAlignment: MainAxisAlignment.end,
-                  children: [
-                    Row(
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        boldText(
-                            text: '\$ ${_cardInfo[index].cost.toString()}',
-                            textAlign: TextAlign.center),
-                        IconButton(
-                          onPressed: () => nextPage(
-                              context: context,
-                              widget: const DescriptionScreen()),
-                          icon: const Icon(
-                            Icons.info_outline_rounded,
-                            color: kWhiteColor,
-                          ),
-                        ),
-                      ],
-                    ),
-                    Row(
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        const Icon(
-                          Icons.location_on,
-                          color: kWhiteColor,
-                          size: 15,
-                        ),
-                        regularText(text: _cardInfo[index].location),
-                      ],
-                    ),
-                    const SizedBox(
-                      height: 10,
-                    ),
-                    Row(
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        _smallCards(
-                            text: _cardInfo[index].bed.toString(),
-                            icon: Icons.bed_outlined),
-                        const SizedBox(
-                          width: 5,
-                        ),
-                        _smallCards(
-                            text: _cardInfo[index].bathroom.toString(),
-                            icon: Icons.bathtub_outlined),
-                        const SizedBox(
-                          width: 5,
-                        ),
-                        _smallCards(
-                            text: _cardInfo[index].parking.toString(),
-                            icon: Icons.car_crash_outlined),
-                      ],
-                    ),
-                    SizedBox(
-                      width: 10,
-                      height: 40,
-                      child: Center(
-                        child: regularText(
-                            text: _cardInfo[index].text,
-                            size: 15,
-                            textAlign: TextAlign.center),
-                      ),
-                    ),
-                    const SizedBox(
-                      height: 20,
-                    ),
-                  ],
-                ),
-              ),
-            ],
-          ),
-        ),
-      ),
-    );
-  }
+class CardWithImage extends StatefulWidget {
+  final List<CardInfo> cardInfo;
+  final int index;
+
+  const CardWithImage({Key? key, required this.index, required this.cardInfo})
+      : super(key: key);
+
+  @override
+  State<CardWithImage> createState() => _CardWithImageState();
+}
+
+int _imageIndex = 0;
+
+class _CardWithImageState extends State<CardWithImage> {
+  final List<PeopleLiked> _peopleLiked = List.generate(
+    15,
+    (index) => PeopleLiked(
+        image: 'asset/heart.png',
+        name: 'Person $index',
+        subtitle: 'Some subtitle',
+        allocated: index % 2 == 0 ? 35 : null),
+  );
 
   Container _smallCards({required String text, required IconData icon}) {
     return Container(
@@ -262,6 +158,171 @@ class _ActivityScreenState extends State<ActivityScreen> {
             ),
           )
         ],
+      ),
+    );
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return SizedBox(
+      child: Padding(
+        padding: EdgeInsets.only(
+            top: widget.index == 0
+                ? 20
+                : widget.index == 1
+                    ? 10
+                    : 0),
+        child: ClipRect(
+          clipBehavior: Clip.antiAliasWithSaveLayer,
+          child: Stack(
+            fit: StackFit.expand,
+            children: [
+              Image.asset(
+                widget.cardInfo[widget.index].image[_imageIndex],
+                fit: BoxFit.fill,
+              ),
+              Positioned(
+                top: 10,
+                left: 2,
+                right: 2,
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: List.generate(
+                    3,
+                    (index) => Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 8),
+                      child: GestureDetector(
+                        onTap: () {
+                          setState(() {
+                            _imageIndex = index;
+                          });
+                        },
+                        child: Padding(
+                          padding: const EdgeInsets.symmetric(vertical: 8.0),
+                          child: Container(
+                            height: 8,
+                            width: 100,
+                            decoration: BoxDecoration(
+                              color: _imageIndex == index
+                                  ? kWhiteColor
+                                  : kCardColor,
+                              borderRadius: BorderRadius.circular(20),
+                            ),
+                          ),
+                        ),
+                      ),
+                    ),
+                  ),
+                ),
+              ),
+              Positioned(
+                top: 30,
+                left: 5,
+                child: IconButton(
+                  onPressed: () {
+                    showBottomSheetWidget(
+                        context: context, peopleLiked: _peopleLiked);
+                  },
+                  icon: Column(
+                    children: [
+                      const Flexible(
+                        child: Icon(
+                          Icons.remove_red_eye_outlined,
+                          size: 18,
+                        ),
+                      ),
+                      regularText(
+                          text: widget.cardInfo[widget.index].likes.toString(),
+                          color: kBlackColor,
+                          size: 12)
+                    ],
+                  ),
+                ),
+              ),
+              Align(
+                alignment: Alignment.bottomCenter,
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.stretch,
+                  mainAxisAlignment: MainAxisAlignment.end,
+                  children: [
+                    Row(
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        boldText(
+                            text:
+                                '\$ ${widget.cardInfo[widget.index].cost.toString()}',
+                            textAlign: TextAlign.center),
+                        IconButton(
+                          onPressed: () => nextPage(
+                              context: context,
+                              widget: const DescriptionScreen()),
+                          icon: const Icon(
+                            Icons.info_outline_rounded,
+                            color: kWhiteColor,
+                          ),
+                        ),
+                      ],
+                    ),
+                    Row(
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        const Icon(
+                          Icons.location_on,
+                          color: kWhiteColor,
+                          size: 15,
+                        ),
+                        regularText(
+                            text: widget.cardInfo[widget.index].location),
+                      ],
+                    ),
+                    const SizedBox(
+                      height: 10,
+                    ),
+                    Row(
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        _smallCards(
+                            text: widget.cardInfo[widget.index].bed.toString(),
+                            icon: Icons.bed_outlined),
+                        const SizedBox(
+                          width: 5,
+                        ),
+                        _smallCards(
+                            text: widget.cardInfo[widget.index].bathroom
+                                .toString(),
+                            icon: Icons.bathtub_outlined),
+                        const SizedBox(
+                          width: 5,
+                        ),
+                        _smallCards(
+                            text: widget.cardInfo[widget.index].parking
+                                .toString(),
+                            icon: Icons.car_crash_outlined),
+                      ],
+                    ),
+                    SizedBox(
+                      width: 10,
+                      height: 40,
+                      child: Center(
+                        child: regularText(
+                            text: widget.cardInfo[widget.index].text,
+                            size: 15,
+                            textAlign: TextAlign.center),
+                      ),
+                    ),
+                    const SizedBox(
+                      height: 20,
+                    ),
+                  ],
+                ),
+              ),
+            ],
+          ),
+        ),
       ),
     );
   }
@@ -290,7 +351,7 @@ class CardInfo {
   final int parking;
   final String text;
   final int likes;
-  final String image;
+  final List<String> image;
   final int funded;
 
   CardInfo(

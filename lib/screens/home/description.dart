@@ -1,7 +1,13 @@
+import 'package:buy_mate/functions/next_page.dart';
+import 'package:buy_mate/providers/bottom_navigation_provider.dart';
+import 'package:buy_mate/screens/home/allocation_screen.dart';
+import 'package:buy_mate/screens/home/home_screen.dart';
+import 'package:buy_mate/screens/home/share_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:buy_mate/constants/color.dart';
 import 'package:buy_mate/screens/home/activity_screen.dart';
 import 'package:buy_mate/widgets/text_styles.dart';
+import 'package:provider/provider.dart';
 
 class DescriptionScreen extends StatelessWidget {
   const DescriptionScreen({Key? key}) : super(key: key);
@@ -94,7 +100,12 @@ class DescriptionScreen extends StatelessWidget {
                     containerColor: kWhiteColor,
                     icon: Icons.close,
                     size: 40,
-                    function: () {},
+                    function: () {
+                      Provider.of<BottomNavigationProvider>(context,
+                              listen: false)
+                          .changeIndex(index: 3);
+                      nextPage(context: context, widget: HomeScreen());
+                    },
                     isBig: true),
                 const SizedBox(
                   width: 30,
@@ -103,13 +114,18 @@ class DescriptionScreen extends StatelessWidget {
                     containerColor: kWhiteColor,
                     icon: Icons.favorite,
                     size: 40,
-                    function: () {},
+                    function: () {
+                      nextPage(
+                          context: context, widget: const AllocationScreen());
+                    },
                     isBig: true),
                 iconWithTaps(
                     containerColor: kWhiteColor,
                     icon: Icons.share,
                     size: 25,
-                    function: () {},
+                    function: () {
+                      nextPage(context: context, widget: const ShareScreen());
+                    },
                     isBig: false),
               ],
             ),
