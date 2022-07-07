@@ -1,3 +1,4 @@
+import 'package:buy_mate/providers/bottom_navigation_provider.dart';
 import 'package:eva_icons_flutter/eva_icons_flutter.dart';
 import 'package:flutter/material.dart';
 import 'package:buy_mate/constants/color.dart';
@@ -5,6 +6,7 @@ import 'package:buy_mate/screens/home/home_screen.dart';
 import 'package:buy_mate/widgets/card_widget.dart';
 import 'package:buy_mate/widgets/elevated_button.dart';
 import 'package:buy_mate/widgets/text_styles.dart';
+import 'package:provider/provider.dart';
 
 class SuccessScreen extends StatelessWidget {
   const SuccessScreen({Key? key}) : super(key: key);
@@ -58,12 +60,10 @@ class SuccessScreen extends StatelessWidget {
                 context: context,
                 text: 'Find a property',
                 function: () {
-                  Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                          builder: (context) => const HomeScreen(
-                                bottomIndex: 1,
-                              )));
+                  Provider.of<BottomNavigationProvider>(context, listen: false)
+                      .changeIndex(index: 1);
+                  Navigator.push(context,
+                      MaterialPageRoute(builder: (context) => HomeScreen()));
                 }),
             const SizedBox(
               height: 20,
@@ -72,12 +72,10 @@ class SuccessScreen extends StatelessWidget {
                 context: context,
                 text: 'Go to Home',
                 function: () {
-                  Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                          builder: (context) => const HomeScreen(
-                                bottomIndex: 3,
-                              )));
+                  Provider.of<BottomNavigationProvider>(context, listen: false)
+                      .changeIndex(index: 3);
+                  Navigator.push(context,
+                      MaterialPageRoute(builder: (context) => HomeScreen()));
                 }),
             const SizedBox(
               height: 20,

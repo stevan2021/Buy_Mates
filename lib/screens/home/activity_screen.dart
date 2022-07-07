@@ -1,3 +1,4 @@
+import 'package:buy_mate/providers/bottom_navigation_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_swipecards/flutter_swipecards.dart';
 import 'package:buy_mate/constants/color.dart';
@@ -7,6 +8,7 @@ import 'package:buy_mate/screens/home/description.dart';
 import 'package:buy_mate/screens/home/share_screen.dart';
 import 'package:buy_mate/widgets/liner_indicator.dart';
 import 'package:buy_mate/widgets/text_styles.dart';
+import 'package:provider/provider.dart';
 
 class ActivityScreen extends StatefulWidget {
   const ActivityScreen({Key? key}) : super(key: key);
@@ -52,40 +54,11 @@ class _ActivityScreenState extends State<ActivityScreen> {
       children: [
         SizedBox(
           height: MediaQuery.of(context).size.height * 0.68,
-          child: TinderSwapCard(
-            swipeUp: false,
-            swipeDown: false,
-            orientation: AmassOrientation.top,
-            totalNum: _cardInfo.length,
-            stackNum: 3,
-            swipeEdge: 4.0,
-            maxWidth: MediaQuery.of(context).size.width,
-            maxHeight: MediaQuery.of(context).size.height * 0.68,
-            minWidth: MediaQuery.of(context).size.width * 0.99,
-            minHeight: MediaQuery.of(context).size.height * 0.67,
-            cardBuilder: (context, index) {
-              WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
-                setState(() {
-                  _currentCard = _cardInfo[index];
-                });
-              });
-              return cardWithImage(context: context, index: index);
-            },
-            swipeUpdateCallback: (DragUpdateDetails details, Alignment align) {
-              /// Get swiping card's alignment
-              if (align.x < 0) {
-                //Card is LEFT swiping
-              } else if (align.x > 0) {
-                //Card is RIGHT swiping
-              }
-            },
-            swipeCompleteCallback:
-                (CardSwipeOrientation orientation, int index) {
-              /// Get orientation & index of swiped card!
-              if (orientation == CardSwipeOrientation.right) {
-                nextPage(context: context, widget: const AllocationScreen());
-              }
-            },
+          child: Stack(
+            children: List.generate(_cardInfo.length,
+                    (index) => cardWithImage(context: context, index: index))
+                .reversed
+                .toList(),
           ),
         ),
         const SizedBox(
@@ -96,9 +69,20 @@ class _ActivityScreenState extends State<ActivityScreen> {
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
             iconWithTaps(
-                icon: Icons.replay, size: 25, function: () {}, isBig: false),
+                icon: Icons.replay,
+                size: 25,
+                function: () {
+                  /// TODO:
+                },
+                isBig: false),
             iconWithTaps(
-                icon: Icons.close, size: 40, function: () {}, isBig: true),
+                icon: Icons.close,
+                size: 40,
+                function: () {
+                  Provider.of<BottomNavigationProvider>(context, listen: false)
+                      .changeIndex(index: 3);
+                },
+                isBig: true),
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 8),
               child: boldText(
@@ -133,197 +117,126 @@ class _ActivityScreenState extends State<ActivityScreen> {
 
   SizedBox cardWithImage({required BuildContext context, required int index}) {
     return SizedBox(
-      height: MediaQuery.of(context).size.height * 0.68,
-      child: ClipRect(
-        clipBehavior: Clip.antiAliasWithSaveLayer,
-        child: Stack(
-          fit: StackFit.expand,
-          children: [
-            Image.asset(
-              _cardInfo[index].image,
-              fit: BoxFit.fill,
-            ),
-            Positioned(
-              top: 10,
-              left: 5,
-              child: IconButton(
-                onPressed: () {
-                  _showBottomSheetWidget();
-                },
-                icon: Column(
-                  children: [
-                    const Icon(
-                      Icons.remove_red_eye_outlined,
-                      size: 18,
-                    ),
-                    regularText(
-                        text: _cardInfo[index].likes.toString(),
-                        color: kBlackColor,
-                        size: 12)
-                  ],
-                ),
+      child: Padding(
+        padding: EdgeInsets.only(
+            top: index == 0
+                ? 20
+                : index == 1
+                    ? 10
+                    : 0),
+        child: ClipRect(
+          clipBehavior: Clip.antiAliasWithSaveLayer,
+          child: Stack(
+            fit: StackFit.expand,
+            children: [
+              Image.asset(
+                _cardInfo[index].image,
+                fit: BoxFit.fill,
               ),
-            ),
-            Align(
-              alignment: Alignment.bottomCenter,
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.stretch,
-                mainAxisAlignment: MainAxisAlignment.end,
-                children: [
-                  Row(
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    mainAxisAlignment: MainAxisAlignment.center,
+              Positioned(
+                top: 10,
+                left: 5,
+                child: IconButton(
+                  onPressed: () {
+                    showBottomSheetWidget(
+                        context: context, peopleLiked: _peopleLiked);
+                  },
+                  icon: Column(
                     children: [
-                      boldText(
-                          text: '\$ ${_cardInfo[index].cost.toString()}',
-                          textAlign: TextAlign.center),
-                      IconButton(
-                        onPressed: () => nextPage(
-                            context: context,
-                            widget: const DescriptionScreen()),
-                        icon: const Icon(
-                          Icons.info_outline_rounded,
-                          color: kWhiteColor,
+                      const Flexible(
+                        child: Icon(
+                          Icons.remove_red_eye_outlined,
+                          size: 18,
                         ),
                       ),
+                      regularText(
+                          text: _cardInfo[index].likes.toString(),
+                          color: kBlackColor,
+                          size: 12)
                     ],
                   ),
-                  Row(
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      const Icon(
-                        Icons.location_on,
-                        color: kWhiteColor,
-                        size: 15,
-                      ),
-                      regularText(text: _cardInfo[index].location),
-                    ],
-                  ),
-                  const SizedBox(
-                    height: 10,
-                  ),
-                  Row(
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      _smallCards(
-                          text: _cardInfo[index].bed.toString(),
-                          icon: Icons.bed_outlined),
-                      const SizedBox(
-                        width: 5,
-                      ),
-                      _smallCards(
-                          text: _cardInfo[index].bathroom.toString(),
-                          icon: Icons.bathtub_outlined),
-                      const SizedBox(
-                        width: 5,
-                      ),
-                      _smallCards(
-                          text: _cardInfo[index].parking.toString(),
-                          icon: Icons.car_crash_outlined),
-                    ],
-                  ),
-                  SizedBox(
-                    width: 10,
-                    height: 40,
-                    child: Center(
-                      child: regularText(
-                          text: _cardInfo[index].text,
-                          size: 15,
-                          textAlign: TextAlign.center),
-                    ),
-                  ),
-                  const SizedBox(
-                    height: 20,
-                  ),
-                ],
+                ),
               ),
-            ),
-          ],
-        ),
-      ),
-    );
-  }
-
-  _showBottomSheetWidget() {
-    showModalBottomSheet(
-      isScrollControlled: true,
-      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
-      context: context,
-      builder: (context) {
-        return Container(
-          height: MediaQuery.of(context).size.height * 0.9,
-          decoration: BoxDecoration(
-            color: kBlackColor,
-            borderRadius: BorderRadius.circular(20),
-          ),
-          child: Padding(
-            padding: const EdgeInsets.all(10),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.stretch,
-              children: [
-                const SizedBox(
-                  height: 50,
-                ),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              Align(
+                alignment: Alignment.bottomCenter,
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.stretch,
+                  mainAxisAlignment: MainAxisAlignment.end,
                   children: [
-                    regularText(text: 'LIKED BY'),
-                    regularText(text: '26 requested', size: 15),
-                  ],
-                ),
-                const SizedBox(
-                  height: 10,
-                ),
-                const Divider(
-                  color: kWhiteColor,
-                  thickness: 2,
-                  indent: 5,
-                  endIndent: 5,
-                ),
-                Expanded(
-                  child: ListView(
-                    children: List.generate(
-                      _peopleLiked.length,
-                      (index) => ListTile(
-                        leading: CircleAvatar(
-                          backgroundImage:
-                              AssetImage(_peopleLiked[index].image),
-                        ),
-                        subtitle:
-                            regularText(text: _peopleLiked[index].subtitle),
-                        title: regularText(text: _peopleLiked[index].name),
-                        trailing: Container(
-                          width: 110,
-                          decoration: BoxDecoration(
-                              border: Border.all(color: kWhiteColor),
-                              color: _peopleLiked[index].allocated == null
-                                  ? kBlackColor
-                                  : kWhiteColor,
-                              borderRadius: BorderRadius.circular(20)),
-                          child: Padding(
-                            padding: const EdgeInsets.all(8.0),
-                            child: boldText(
-                                textAlign: TextAlign.center,
-                                text: _peopleLiked[index].allocated == null
-                                    ? 'Pending'
-                                    : '${_peopleLiked[index].allocated}% allocated',
-                                size: 15,
-                                color: _peopleLiked[index].allocated == null
-                                    ? kWhiteColor
-                                    : kBlackColor),
+                    Row(
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        boldText(
+                            text: '\$ ${_cardInfo[index].cost.toString()}',
+                            textAlign: TextAlign.center),
+                        IconButton(
+                          onPressed: () => nextPage(
+                              context: context,
+                              widget: const DescriptionScreen()),
+                          icon: const Icon(
+                            Icons.info_outline_rounded,
+                            color: kWhiteColor,
                           ),
                         ),
+                      ],
+                    ),
+                    Row(
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        const Icon(
+                          Icons.location_on,
+                          color: kWhiteColor,
+                          size: 15,
+                        ),
+                        regularText(text: _cardInfo[index].location),
+                      ],
+                    ),
+                    const SizedBox(
+                      height: 10,
+                    ),
+                    Row(
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        _smallCards(
+                            text: _cardInfo[index].bed.toString(),
+                            icon: Icons.bed_outlined),
+                        const SizedBox(
+                          width: 5,
+                        ),
+                        _smallCards(
+                            text: _cardInfo[index].bathroom.toString(),
+                            icon: Icons.bathtub_outlined),
+                        const SizedBox(
+                          width: 5,
+                        ),
+                        _smallCards(
+                            text: _cardInfo[index].parking.toString(),
+                            icon: Icons.car_crash_outlined),
+                      ],
+                    ),
+                    SizedBox(
+                      width: 10,
+                      height: 40,
+                      child: Center(
+                        child: regularText(
+                            text: _cardInfo[index].text,
+                            size: 15,
+                            textAlign: TextAlign.center),
                       ),
                     ),
-                  ),
+                    const SizedBox(
+                      height: 20,
+                    ),
+                  ],
                 ),
-              ],
-            ),
+              ),
+            ],
           ),
-        );
-      },
+        ),
+      ),
     );
   }
 
@@ -421,5 +334,85 @@ Widget iconWithTaps(
         ),
       ),
     ),
+  );
+}
+
+showBottomSheetWidget(
+    {required BuildContext context, required List<PeopleLiked> peopleLiked}) {
+  showModalBottomSheet(
+    isScrollControlled: true,
+    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
+    context: context,
+    builder: (context) {
+      return Container(
+        height: MediaQuery.of(context).size.height * 0.9,
+        decoration: BoxDecoration(
+          color: kBlackColor,
+          borderRadius: BorderRadius.circular(20),
+        ),
+        child: Padding(
+          padding: const EdgeInsets.all(10),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            children: [
+              const SizedBox(
+                height: 50,
+              ),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  regularText(text: 'LIKED BY'),
+                  regularText(text: '26 requested', size: 15),
+                ],
+              ),
+              const SizedBox(
+                height: 10,
+              ),
+              const Divider(
+                color: kWhiteColor,
+                thickness: 2,
+                indent: 5,
+                endIndent: 5,
+              ),
+              Expanded(
+                child: ListView(
+                  children: List.generate(
+                    peopleLiked.length,
+                    (index) => ListTile(
+                      leading: CircleAvatar(
+                        backgroundImage: AssetImage(peopleLiked[index].image),
+                      ),
+                      subtitle: regularText(text: peopleLiked[index].subtitle),
+                      title: regularText(text: peopleLiked[index].name),
+                      trailing: Container(
+                        width: 110,
+                        decoration: BoxDecoration(
+                            border: Border.all(color: kWhiteColor),
+                            color: peopleLiked[index].allocated == null
+                                ? kBlackColor
+                                : kWhiteColor,
+                            borderRadius: BorderRadius.circular(20)),
+                        child: Padding(
+                          padding: const EdgeInsets.all(8.0),
+                          child: boldText(
+                              textAlign: TextAlign.center,
+                              text: peopleLiked[index].allocated == null
+                                  ? 'Pending'
+                                  : '${peopleLiked[index].allocated}% allocated',
+                              size: 15,
+                              color: peopleLiked[index].allocated == null
+                                  ? kWhiteColor
+                                  : kBlackColor),
+                        ),
+                      ),
+                    ),
+                  ),
+                ),
+              ),
+            ],
+          ),
+        ),
+      );
+    },
   );
 }

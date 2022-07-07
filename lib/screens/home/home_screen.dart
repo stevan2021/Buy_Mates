@@ -1,4 +1,5 @@
 import 'package:animated_bottom_navigation_bar/animated_bottom_navigation_bar.dart';
+import 'package:buy_mate/providers/bottom_navigation_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:buy_mate/constants/color.dart';
 import 'package:buy_mate/functions/next_page.dart';
@@ -10,25 +11,9 @@ import 'package:buy_mate/screens/home/purchase_power_screen.dart';
 import 'package:buy_mate/screens/home/share_screen.dart';
 import 'package:buy_mate/widgets/card_widget.dart';
 import 'package:buy_mate/widgets/text_styles.dart';
+import 'package:provider/provider.dart';
 
-class HomeScreen extends StatefulWidget {
-  final int bottomIndex;
-
-  const HomeScreen({Key? key, required this.bottomIndex}) : super(key: key);
-
-  @override
-  State<HomeScreen> createState() => _HomeScreenState();
-}
-
-int _bottomNavIndex = 0;
-
-class _HomeScreenState extends State<HomeScreen> {
-  @override
-  void initState() {
-    _bottomNavIndex = widget.bottomIndex;
-    super.initState();
-  }
-
+class HomeScreen extends StatelessWidget {
   final List<IconAndText> _iconList = [
     IconAndText(icon: Icons.home_work_outlined, text: 'Assets'),
     IconAndText(icon: Icons.monitor_heart_outlined, text: 'Activity'),
@@ -38,15 +23,19 @@ class _HomeScreenState extends State<HomeScreen> {
 
   @override
   Widget build(BuildContext context) {
+    int bottomNavIndex =
+        Provider.of<BottomNavigationProvider>(context).bottomIndex;
     return Scaffold(
       bottomNavigationBar: AnimatedBottomNavigationBar.builder(
         backgroundColor: kBlackColor,
-        activeIndex: _bottomNavIndex,
+        activeIndex: bottomNavIndex,
         gapLocation: GapLocation.none,
         leftCornerRadius: 20,
         rightCornerRadius: 20,
         notchSmoothness: NotchSmoothness.smoothEdge,
-        onTap: (index) => setState(() => _bottomNavIndex = index),
+        onTap: (index) =>
+            Provider.of<BottomNavigationProvider>(context, listen: false)
+                .changeIndex(index: index),
         tabBuilder: (int index, bool isActive) {
           final color = isActive ? Colors.white : kWhiteColor.withOpacity(0.5);
           return Column(
@@ -76,7 +65,7 @@ class _HomeScreenState extends State<HomeScreen> {
         child: Column(
           children: [
             Container(
-              color: _bottomNavIndex == 3 ? kBlackColor : kWhiteColor,
+              color: bottomNavIndex == 3 ? kBlackColor : kWhiteColor,
               child: SafeArea(
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -92,12 +81,12 @@ class _HomeScreenState extends State<HomeScreen> {
                         width: 42,
                         child: IconButton(
                           onPressed: () {
-                            setState(() {
-                              _bottomNavIndex = 3;
-                            });
+                            Provider.of<BottomNavigationProvider>(context,
+                                    listen: false)
+                                .changeIndex(index: 3);
                           },
                           icon: Icon(
-                            _bottomNavIndex == 3
+                            bottomNavIndex == 3
                                 ? Icons.menu
                                 : Icons.arrow_back_ios,
                             color: kWhiteColor,
@@ -105,7 +94,7 @@ class _HomeScreenState extends State<HomeScreen> {
                         ),
                       ),
                     ),
-                    if (_bottomNavIndex != 3)
+                    if (bottomNavIndex != 3)
                       Container(
                         color: kWhiteColor,
                         child: Image.asset('asset/small_logo.png'),
@@ -113,14 +102,15 @@ class _HomeScreenState extends State<HomeScreen> {
                     IconButton(
                       onPressed: () {
                         //TODO
-                        if (_bottomNavIndex == 3) {
+                        if (bottomNavIndex == 3) {
                           nextPage(
-                              context: context, widget: const NotificationScreen());
+                              context: context,
+                              widget: const NotificationScreen());
                         }
                       },
                       icon: Icon(
-                        _bottomNavIndex == 3 ? Icons.notifications : Icons.menu,
-                        color: _bottomNavIndex == 3 ? kWhiteColor : kBlackColor,
+                        bottomNavIndex == 3 ? Icons.notifications : Icons.menu,
+                        color: bottomNavIndex == 3 ? kWhiteColor : kBlackColor,
                       ),
                     ),
                   ],
@@ -128,7 +118,7 @@ class _HomeScreenState extends State<HomeScreen> {
               ),
             ),
             IndexedStack(
-              index: _bottomNavIndex,
+              index: bottomNavIndex,
               children: [
                 AssetScreen(),
                 const ActivityScreen(),
@@ -174,18 +164,29 @@ class _HomeScreenState extends State<HomeScreen> {
                                 TapIconAndText(
                                   text: 'My Assets',
                                   function: () {
-                                    setState(() {
-                                      _bottomNavIndex = 0;
-                                    });
+                                    Provider.of<BottomNavigationProvider>(
+                                            context,
+                                            listen: false)
+                                        .changeIndex(index: 0);
                                   },
                                   icon: Icons.home_work_outlined,
                                 ),
                                 TapIconAndText(
                                   text: 'Team Mates',
                                   function: () {
-                                    nextPage(
+                                    final List<PeopleLiked> peopleLiked =
+                                        List.generate(
+                                      15,
+                                      (index) => PeopleLiked(
+                                          image: 'asset/heart.png',
+                                          name: 'Person $index',
+                                          subtitle: 'Some subtitle',
+                                          allocated:
+                                              index % 2 == 0 ? 35 : null),
+                                    );
+                                    showBottomSheetWidget(
                                         context: context,
-                                        widget: const ShareScreen());
+                                        peopleLiked: peopleLiked);
                                   },
                                   icon: Icons.people_outlined,
                                 ),
@@ -202,9 +203,9 @@ class _HomeScreenState extends State<HomeScreen> {
                     ),
                     GestureDetector(
                       onTap: () {
-                        setState(() {
-                          _bottomNavIndex = 1;
-                        });
+                        Provider.of<BottomNavigationProvider>(context,
+                                listen: false)
+                            .changeIndex(index: 1);
                       },
                       child: CardWidget(
                         color: kWhiteColor,
@@ -227,7 +228,9 @@ class _HomeScreenState extends State<HomeScreen> {
                     GestureDetector(
                       onTap: () {
                         nextPage(
-                            context: context, widget: const NotificationScreen());
+                          context: context,
+                          widget: const NotificationScreen(),
+                        );
                       },
                       child: CardWidget(
                         radius: 10,

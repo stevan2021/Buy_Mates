@@ -1,8 +1,10 @@
+import 'package:buy_mate/providers/bottom_navigation_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:buy_mate/constants/color.dart';
 import 'package:buy_mate/screens/home/home_screen.dart';
 import 'package:buy_mate/widgets/elevated_button.dart';
 import 'package:buy_mate/widgets/text_styles.dart';
+import 'package:provider/provider.dart';
 
 class PaymentSuccessScreen extends StatelessWidget {
   const PaymentSuccessScreen({Key? key}) : super(key: key);
@@ -47,11 +49,12 @@ class PaymentSuccessScreen extends StatelessWidget {
                   context: context,
                   text: 'Back to Home',
                   function: () {
+                    Provider.of<BottomNavigationProvider>(context,
+                            listen: false)
+                        .changeIndex(index: 3);
                     Navigator.pushAndRemoveUntil(
                         context,
-                        MaterialPageRoute(
-                            builder: (context) =>
-                                const HomeScreen(bottomIndex: 3)),
+                        MaterialPageRoute(builder: (context) => HomeScreen()),
                         (route) => false);
                   })
             ],

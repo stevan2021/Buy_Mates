@@ -1,3 +1,4 @@
+import 'package:buy_mate/screens/home/notification_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:buy_mate/constants/color.dart';
 import 'package:buy_mate/functions/next_page.dart';
@@ -211,84 +212,90 @@ class PurchasePowerScreen extends StatelessWidget {
             ),
           ),
         ),
-        Container(
-          height: 210,
-          width: MediaQuery.of(context).size.width * 0.45,
-          decoration: BoxDecoration(
-            color: kLightBlack,
-            borderRadius: BorderRadius.circular(10),
-          ),
-          child: Padding(
-            padding: const EdgeInsets.all(10),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.center,
-              mainAxisAlignment: MainAxisAlignment.start,
-              children: [
-                Row(
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    const Icon(
-                      Icons.info_outline,
-                      color: Colors.green,
-                    ),
-                    const SizedBox(
-                      width: 5,
-                    ),
-                    boldText(text: 'New Alert', size: 18, color: Colors.green),
-                    const SizedBox(
-                      width: 5,
-                    ),
-                    const Icon(
-                      Icons.notifications,
-                      size: 25,
-                      color: Colors.green,
-                    )
-                  ],
-                ),
-                Expanded(
-                    child: ListView(
-                  scrollDirection: Axis.vertical,
-                  shrinkWrap: true,
-                  children: List.generate(
-                    2,
-                    (index) => Padding(
-                      padding: const EdgeInsets.all(8.0),
-                      child: Column(
-                        children: [
-                          Row(
-                            children: [
-                              Container(
-                                height: 5,
-                                width: 5,
-                                decoration: BoxDecoration(
-                                  color: kWhiteColor,
-                                  borderRadius: BorderRadius.circular(200),
+        GestureDetector(
+          onTap: () {
+            nextPage(context: context, widget: const NotificationScreen());
+          },
+          child: Container(
+            height: 210,
+            width: MediaQuery.of(context).size.width * 0.45,
+            decoration: BoxDecoration(
+              color: kLightBlack,
+              borderRadius: BorderRadius.circular(10),
+            ),
+            child: Padding(
+              padding: const EdgeInsets.all(10),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.center,
+                mainAxisAlignment: MainAxisAlignment.start,
+                children: [
+                  Row(
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      const Icon(
+                        Icons.info_outline,
+                        color: Colors.green,
+                      ),
+                      const SizedBox(
+                        width: 5,
+                      ),
+                      boldText(
+                          text: 'New Alert', size: 18, color: Colors.green),
+                      const SizedBox(
+                        width: 5,
+                      ),
+                      const Icon(
+                        Icons.notifications,
+                        size: 25,
+                        color: Colors.green,
+                      )
+                    ],
+                  ),
+                  Expanded(
+                      child: ListView(
+                    scrollDirection: Axis.vertical,
+                    shrinkWrap: true,
+                    children: List.generate(
+                      2,
+                      (index) => Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: Column(
+                          children: [
+                            Row(
+                              children: [
+                                Container(
+                                  height: 5,
+                                  width: 5,
+                                  decoration: BoxDecoration(
+                                    color: kWhiteColor,
+                                    borderRadius: BorderRadius.circular(200),
+                                  ),
                                 ),
-                              ),
-                              const SizedBox(
-                                width: 5,
-                              ),
-                              boldText(
-                                  text: 'Verify your Power',
-                                  size: 12,
-                                  color: kWhiteColor),
-                            ],
-                          ),
-                          Padding(
-                            padding: const EdgeInsets.only(left: 8),
-                            child: regularText(
-                              text:
-                                  'Lorem Ipsum is simply dummy text of the printing and typesetting industry.',
-                              color: kWhiteColor.withOpacity(0.6),
+                                const SizedBox(
+                                  width: 5,
+                                ),
+                                boldText(
+                                    text: 'Verify your Power',
+                                    size: 12,
+                                    color: kWhiteColor),
+                              ],
                             ),
-                          ),
-                        ],
+                            Padding(
+                              padding: const EdgeInsets.only(left: 8),
+                              child: regularText(
+                                text:
+                                    'Lorem Ipsum is simply dummy text of the printing and typesetting industry.',
+                                color: kWhiteColor.withOpacity(0.6),
+                              ),
+                            ),
+                          ],
+                        ),
                       ),
                     ),
-                  ),
-                ))
-              ],
+                  ))
+                ],
+              ),
             ),
           ),
         ),
