@@ -32,22 +32,21 @@ class _LoadingScreenState extends State<LoadingScreen> {
           return Scaffold(
             backgroundColor: Colors.black,
             body: Column(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              mainAxisAlignment: MainAxisAlignment.spaceAround,
               children: [
                 Expanded(
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.end,
                     children: const [
-                      CenterImage(image: 'asset/logo.png'),
+                      Flexible(
+                        child: CenterImage(image: 'asset/logo.png'),
+                      ),
                       SizedBox(
                         height: 20,
                       ),
                       BoldText(
                         text: 'Property Sharing solutions',
                         color: Colors.white,
-                      ),
-                      SizedBox(
-                        height: 75,
                       ),
                     ],
                   ),

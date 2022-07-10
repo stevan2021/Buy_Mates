@@ -39,6 +39,7 @@ class _AllocationScreenState extends State<AllocationScreen> {
       body: SafeArea(
         child: SingleChildScrollView(
           child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
             children: [
               _topBar(context: context),
               const SizedBox(
@@ -209,6 +210,7 @@ class _SliderWithMoneyWidgetState extends State<SliderWithMoneyWidget> {
   @override
   Widget build(BuildContext context) {
     return Column(
+      mainAxisAlignment: MainAxisAlignment.center,
       crossAxisAlignment: CrossAxisAlignment.center,
       children: [
         regularText(
@@ -220,32 +222,27 @@ class _SliderWithMoneyWidgetState extends State<SliderWithMoneyWidget> {
           height: 20,
         ),
         SizedBox(
-          width: MediaQuery.of(context).size.width / 2,
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              boldText(text: '\$', size: 35, color: kBlackColor),
-              Expanded(
-                child: TextField(
-                  controller: _moneyController,
-                  keyboardType: TextInputType.number,
-                  style: const TextStyle(
-                      fontWeight: FontWeight.bold, fontSize: 35),
-                  decoration: const InputDecoration(border: InputBorder.none),
-                  onChanged: (value) {
-                    _currentSelectedMoney = double.parse(value);
-                    if (_currentSelectedMoney > _totalMoney ||
-                        _currentSelectedMoney <= 0) {
-                      return;
-                    }
-                    _moneySliderValue =
-                        ((_currentSelectedMoney / _totalMoney) * 100)
-                            .toDouble();
-                    setState(() {});
-                  },
-                ),
-              ),
-            ],
+          width: MediaQuery.of(context).size.width * 0.5,
+          child: TextField(
+            textAlign: TextAlign.center,
+            controller: _moneyController,
+            keyboardType: TextInputType.number,
+            style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 35),
+            decoration: InputDecoration(
+              border: InputBorder.none,
+              prefix: boldText(
+                  text: '\$', textAlign: TextAlign.end, color: kBlackColor),
+            ),
+            onChanged: (value) {
+              _currentSelectedMoney = double.parse(value);
+              if (_currentSelectedMoney > _totalMoney ||
+                  _currentSelectedMoney <= 0) {
+                return;
+              }
+              _moneySliderValue =
+                  ((_currentSelectedMoney / _totalMoney) * 100).toDouble();
+              setState(() {});
+            },
           ),
         ),
         const SizedBox(
@@ -314,6 +311,8 @@ class _SliderWithBorrowMoneyWidgetState
   @override
   Widget build(BuildContext context) {
     return Column(
+      mainAxisAlignment: MainAxisAlignment.center,
+      crossAxisAlignment: CrossAxisAlignment.center,
       children: [
         regularText(
             text: 'How Much Money Do You Want To Invest In The Property',
@@ -324,32 +323,27 @@ class _SliderWithBorrowMoneyWidgetState
           height: 20,
         ),
         SizedBox(
-          width: MediaQuery.of(context).size.width / 2,
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              boldText(text: '\$', size: 35, color: kBlackColor),
-              Expanded(
-                child: TextField(
-                  controller: _borrowController,
-                  keyboardType: TextInputType.number,
-                  style: const TextStyle(
-                      fontWeight: FontWeight.bold, fontSize: 35),
-                  decoration: const InputDecoration(border: InputBorder.none),
-                  onChanged: (value) {
-                    _currentBorrowMoney = double.parse(value);
-                    if (_currentBorrowMoney > _totalBorrowMoney ||
-                        _currentBorrowMoney <= 0) {
-                      return;
-                    }
-                    _borrowSliderValue =
-                        ((_currentBorrowMoney / _totalBorrowMoney) * 100)
-                            .toDouble();
-                    setState(() {});
-                  },
-                ),
-              ),
-            ],
+          width: MediaQuery.of(context).size.width * 0.5,
+          child: TextField(
+            textAlign: TextAlign.center,
+            controller: _borrowController,
+            keyboardType: TextInputType.number,
+            style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 35),
+            decoration: InputDecoration(
+              prefix: boldText(
+                  text: '\$', textAlign: TextAlign.end, color: kBlackColor),
+              border: InputBorder.none,
+            ),
+            onChanged: (value) {
+              _currentBorrowMoney = double.parse(value);
+              if (_currentBorrowMoney > _totalBorrowMoney ||
+                  _currentBorrowMoney <= 0) {
+                return;
+              }
+              _borrowSliderValue =
+                  ((_currentBorrowMoney / _totalBorrowMoney) * 100).toDouble();
+              setState(() {});
+            },
           ),
         ),
         const SizedBox(

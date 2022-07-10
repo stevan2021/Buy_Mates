@@ -16,10 +16,12 @@ class ThirdPage extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.center,
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
-            SizedBox(
-              width: MediaQuery.of(context).size.width,
-              child: const CenterImage(
-                image: 'asset/frame.png',
+            Flexible(
+              child: SizedBox(
+                width: MediaQuery.of(context).size.width,
+                child: const CenterImage(
+                  image: 'asset/frame.png',
+                ),
               ),
             ),
             const SizedBox(
@@ -41,6 +43,9 @@ class ThirdPage extends StatelessWidget {
                     ),
                   );
                 }),
+            const SizedBox(
+              height: 10,
+            ),
           ],
         ),
       ),
