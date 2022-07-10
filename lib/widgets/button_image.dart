@@ -1,4 +1,3 @@
-
 import 'package:flutter/material.dart';
 
 class ButtonImage extends StatelessWidget {
@@ -8,8 +7,12 @@ class ButtonImage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Image.asset(
-      ('asset/button.png'),
+    return SizedBox(
+      width: MediaQuery.of(context).size.width * 0.25,
+      child: Image.asset(
+        ('asset/button.png'),
+        fit: BoxFit.fill,
+      ),
     );
   }
 }

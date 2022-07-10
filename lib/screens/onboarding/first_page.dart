@@ -17,38 +17,41 @@ class FirstPage extends StatelessWidget {
       backgroundColor: Colors.white,
       body: SafeArea(
         child: Column(
-          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+          mainAxisAlignment: MainAxisAlignment.spaceAround,
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
-            Flexible(
-              child: SizedBox(
-                width: MediaQuery.of(context).size.width,
-                child: const CenterImage(
-                  image: 'asset/home.png',
-                ),
+            const SizedBox(
+              height: 30,
+            ),
+            SizedBox(
+              width: MediaQuery.of(context).size.width,
+              child: const CenterImage(
+                image: 'asset/home.png',
               ),
             ),
-            const SizedBox(
-              height: 20,
-            ),
-            const BoldText(text: 'Get your property that you want with mates'),
-            const SizedBox(
-              height: 20,
-            ),
-            GestureDetector(
-              onTap: () {
-                Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                        builder: (context) => const SecondPage()));
-              },
-              child: const ButtonImage(),
-            ),
-            TextButton(
-              onPressed: () {
-                nextPage(context: context, widget: Login());
-              },
-              child: regularText(text: 'Skip', color: kBlackColor),
+            Column(
+              children: [
+                const BoldText(
+                    text: 'Get your property that you want with mates'),
+                const SizedBox(
+                  height: 20,
+                ),
+                GestureDetector(
+                  onTap: () {
+                    Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => const SecondPage()));
+                  },
+                  child: const ButtonImage(),
+                ),
+                TextButton(
+                  onPressed: () {
+                    nextPage(context: context, widget: Login());
+                  },
+                  child: regularText(text: 'Skip', color: kBlackColor),
+                ),
+              ],
             ),
           ],
         ),

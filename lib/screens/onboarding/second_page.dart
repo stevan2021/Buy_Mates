@@ -17,14 +17,17 @@ class SecondPage extends StatelessWidget {
       backgroundColor: Colors.white,
       body: SafeArea(
         child: Column(
-          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+          mainAxisAlignment: MainAxisAlignment.spaceAround,
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
+            const SizedBox(
+              height: 30,
+            ),
             Flexible(
               child: SizedBox(
                 width: MediaQuery.of(context).size.width,
                 child: Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
+                  mainAxisAlignment: MainAxisAlignment.end,
                   children: const [
                     Flexible(
                       child: CenterImage(
@@ -40,28 +43,31 @@ class SecondPage extends StatelessWidget {
                 ),
               ),
             ),
-            const SizedBox(
-              height: 30,
-            ),
-            const BoldText(
-              text:
-                  'Boost your purchasing power by connecting friends and family to your account',
-            ),
-            const SizedBox(
-              height: 20,
-            ),
-            GestureDetector(
-              onTap: () {
-                Navigator.push(context,
-                    MaterialPageRoute(builder: (context) => const ThirdPage()));
-              },
-              child: const ButtonImage(),
-            ),
-            TextButton(
-              onPressed: () {
-                nextPage(context: context, widget: Login());
-              },
-              child: regularText(text: 'Skip', color: kBlackColor),
+            Column(
+              children: [
+                const BoldText(
+                  text:
+                      'Boost your purchasing power by connecting friends and family to your account',
+                ),
+                const SizedBox(
+                  height: 20,
+                ),
+                GestureDetector(
+                  onTap: () {
+                    Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => const ThirdPage()));
+                  },
+                  child: const ButtonImage(),
+                ),
+                TextButton(
+                  onPressed: () {
+                    nextPage(context: context, widget: Login());
+                  },
+                  child: regularText(text: 'Skip', color: kBlackColor),
+                ),
+              ],
             ),
           ],
         ),

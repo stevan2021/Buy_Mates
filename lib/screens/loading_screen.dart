@@ -38,11 +38,11 @@ class _LoadingScreenState extends State<LoadingScreen> {
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.end,
                     children: const [
+                      SizedBox(
+                        height: 30,
+                      ),
                       Flexible(
                         child: CenterImage(image: 'asset/logo.png'),
-                      ),
-                      SizedBox(
-                        height: 20,
                       ),
                       BoldText(
                         text: 'Property Sharing solutions',

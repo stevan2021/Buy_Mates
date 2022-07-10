@@ -4,7 +4,8 @@ SizedBox elevatedButton(
     {required BuildContext context,
     double? size,
     required String text,
-    required Function() function,double? rounded}) {
+    required Function() function,
+    double? rounded}) {
   return SizedBox(
     width: MediaQuery.of(context).size.width * (size ?? 0.85),
     height: 60,
@@ -12,7 +13,7 @@ SizedBox elevatedButton(
       style: ButtonStyle(
           shape: MaterialStateProperty.all<RoundedRectangleBorder>(
             RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(rounded?? 10.0),
+              borderRadius: BorderRadius.circular(rounded ?? 10.0),
             ),
           ),
           backgroundColor: MaterialStateProperty.all(Colors.black)),
@@ -20,7 +21,7 @@ SizedBox elevatedButton(
       child: Text(
         text,
         style: const TextStyle(
-            color: Colors.white, fontWeight: FontWeight.bold, fontSize: 20),
+            color: Colors.white, fontWeight: FontWeight.bold, fontSize: 25),
       ),
     ),
   );
