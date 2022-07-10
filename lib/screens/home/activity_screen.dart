@@ -181,9 +181,31 @@ class _CardWithImageState extends State<CardWithImage> {
           child: Stack(
             fit: StackFit.expand,
             children: [
-              Image.asset(
-                widget.cardInfo[widget.index].image[_imageIndex],
-                fit: BoxFit.fill,
+              GestureDetector(
+                onHorizontalDragEnd: (DragEndDetails drag) {
+                  print(drag.primaryVelocity);
+                  if (drag.primaryVelocity! < 0) {
+                    setState(() {
+                      if (_imageIndex == 0) {
+                        _imageIndex = 1;
+                      } else if (_imageIndex == 1) {
+                        _imageIndex = 2;
+                      }
+                    });
+                  } else if (drag.primaryVelocity! > 0) {
+                    setState(() {
+                      if (_imageIndex == 1) {
+                        _imageIndex = 0;
+                      } else if (_imageIndex == 2) {
+                        _imageIndex = 1;
+                      }
+                    });
+                  }
+                },
+                child: Image.asset(
+                  widget.cardInfo[widget.index].image[_imageIndex],
+                  fit: BoxFit.fill,
+                ),
               ),
               Positioned(
                 top: 10,
@@ -377,7 +399,7 @@ Widget iconWithTaps(
     child: Padding(
       padding: const EdgeInsets.all(5.0),
       child: Container(
-          height: isBig ? 58 : 40,
+        height: isBig ? 58 : 40,
         // width: isBig ? 58 : 40,
         decoration: BoxDecoration(
           color: containerColor ?? Colors.transparent,

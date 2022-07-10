@@ -11,6 +11,7 @@ class CenterImage extends StatelessWidget {
       width: MediaQuery.of(context).size.width,
       child: Image.asset(
         (image),
+        fit: BoxFit.fill,
       ),
     );
   }

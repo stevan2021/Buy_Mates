@@ -16,86 +16,89 @@ class VerifyInterestScreen extends StatelessWidget {
         child: Padding(
           padding: const EdgeInsets.symmetric(horizontal: 20),
           child: SingleChildScrollView(
-            child: Column(
-              //crossAxisAlignment: CrossAxisAlignment.stretch,
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                regularText(
-                    text: 'Secure your investment',
-                    color: Colors.blue,
-                    size: 25,
-                    textAlign: TextAlign.center),
-                const SizedBox(
-                  height: 10,
-                ),
-                SizedBox(
-                  height: 150,
-                  child: Image.asset('asset/book.png'),
-                ),
-                const SizedBox(
-                  height: 10,
-                ),
-                boldText(
-                    text: '\$500 AUD',
-                    color: kBlackColor,
-                    textAlign: TextAlign.center),
-                const SizedBox(
-                  height: 10,
-                ),
-                regularText(
-                    text:
-                        'To verify your interest\nof investment we ask for deposit.',
-                    color: kBlackColor,
-                    textAlign: TextAlign.center),
-                const SizedBox(
-                  height: 20,
-                ),
-                regularText(
-                    size: 13,
-                    text:
-                        'After we receive the money we will start with all the paper work. No worries, in case that do not classify in BUYMATE you will get your money back.',
-                    color: kBlackColor.withOpacity(0.5),
-                    textAlign: TextAlign.center),
-                const SizedBox(
-                  height: 40,
-                ),
-                elevatedButton(
-                    context: context,
-                    text: 'Continue',
-                    function: () {
-                      nextPage(context: context, widget: const SubsPay());
-                    }),
-                const SizedBox(
-                  height: 20,
-                ),
-                TextButton(
-                  onPressed: () {
-                    Navigator.pop(context);
-                  },
-                  child: mediumText(text: 'Cancel', color: Colors.blue),
-                ),
-                const SizedBox(
-                  height: 20,
-                ),
-                regularText(
-                    text: _tAndC,
-                    size: 13,
-                    color: kBlackColor.withOpacity(0.5),
-                    textAlign: TextAlign.center),
-                TextButton(
-                  onPressed: () {
-                    Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                            builder: (context) => const TermsAndConditions()));
-                  },
-                  child: regularText(
-                      text: 'Privacy policy',
-                      size: 13,
+            child: SizedBox(
+              height: MediaQuery.of(context).size.height,
+              child: Column(
+                //crossAxisAlignment: CrossAxisAlignment.stretch,
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  regularText(
+                      text: 'Secure your investment',
                       color: Colors.blue,
+                      size: 25,
                       textAlign: TextAlign.center),
-                ),
-              ],
+                  const SizedBox(
+                    height: 10,
+                  ),
+                  SizedBox(
+                    height: 150,
+                    child: Image.asset('asset/book.png'),
+                  ),
+                  const SizedBox(
+                    height: 10,
+                  ),
+                  boldText(
+                      text: '\$500 AUD',
+                      color: kBlackColor,
+                      textAlign: TextAlign.center),
+                  const SizedBox(
+                    height: 10,
+                  ),
+                  regularText(
+                      text:
+                          'To verify your interest\nof investment we ask for deposit.',
+                      color: kBlackColor,
+                      textAlign: TextAlign.center),
+                  const SizedBox(
+                    height: 20,
+                  ),
+                  regularText(
+                      size: 13,
+                      text:
+                          'After we receive the money we will start with all the paper work. No worries, in case that do not classify in BUYMATE you will get your money back.',
+                      color: kBlackColor.withOpacity(0.5),
+                      textAlign: TextAlign.center),
+                  const SizedBox(
+                    height: 40,
+                  ),
+                  elevatedButton(
+                      context: context,
+                      text: 'Continue',
+                      function: () {
+                        nextPage(context: context, widget: const SubsPay());
+                      }),
+                  const SizedBox(
+                    height: 20,
+                  ),
+                  TextButton(
+                    onPressed: () {
+                      Navigator.pop(context);
+                    },
+                    child: mediumText(text: 'Cancel', color: Colors.blue),
+                  ),
+                  const SizedBox(
+                    height: 20,
+                  ),
+                  regularText(
+                      text: _tAndC,
+                      size: 13,
+                      color: kBlackColor.withOpacity(0.5),
+                      textAlign: TextAlign.center),
+                  TextButton(
+                    onPressed: () {
+                      Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => const TermsAndConditions()));
+                    },
+                    child: regularText(
+                        text: 'Privacy policy',
+                        size: 13,
+                        color: Colors.blue,
+                        textAlign: TextAlign.center),
+                  ),
+                ],
+              ),
             ),
           ),
         ),

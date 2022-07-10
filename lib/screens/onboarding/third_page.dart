@@ -13,9 +13,12 @@ class ThirdPage extends StatelessWidget {
       backgroundColor: Colors.white,
       body: SafeArea(
         child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
+          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
+            const SizedBox(
+              height: 30,
+            ),
             Flexible(
               child: SizedBox(
                 width: MediaQuery.of(context).size.width,
@@ -23,9 +26,6 @@ class ThirdPage extends StatelessWidget {
                   image: 'asset/frame.png',
                 ),
               ),
-            ),
-            const SizedBox(
-              height: 20,
             ),
             const BoldText(
                 text: 'BuyMates manage the property and pay your rental %'),

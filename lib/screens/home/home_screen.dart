@@ -267,7 +267,7 @@ class HomeScreen extends StatelessWidget {
                                         Icons.notifications,
                                         color: kWhiteColor,
                                       ),
-                                      regularText(text: 'New Alert', size: 18),
+                                      boldText(text: 'New Alert', size: 20),
                                       regularText(
                                           text: 'View now',
                                           color: kWhiteColor.withOpacity(0.8))
@@ -389,6 +389,7 @@ class TapIconAndText extends StatelessWidget {
               ),
               regularText(
                 text: text,
+                size: 18,
                 color: kWhiteColor.withOpacity(0.8),
               ),
             ],
