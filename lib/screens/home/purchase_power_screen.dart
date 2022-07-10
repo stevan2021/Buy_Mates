@@ -10,158 +10,142 @@ class PurchasePowerScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    double screenHeight = MediaQuery.of(context).size.height;
+    double screenWidth = MediaQuery.of(context).size.width;
     return Scaffold(
       backgroundColor: kBlackColor,
       body: SafeArea(
-        child: Column(
-          children: [
-            ListTile(
-              leading: const CircleAvatar(
-                radius: 30,
-              ),
-              title: boldText(text: 'Top #293 Mates', size: 22),
-              subtitle: regularText(
-                  text: 'Below are your latest updates.',
-                  color: kWhiteColor.withOpacity(0.7)),
-            ),
-            _upperTwoWidget(context),
-            const SizedBox(
-              height: 20,
-            ),
-            _middleTwoWidgets(context),
-            const SizedBox(
-              height: 20,
-            ),
-            Expanded(
-              child: GestureDetector(
-                onTap: () {
-                  nextPage(context: context, widget: const PurchasePower());
-                },
-                child: Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: Container(
-                    decoration: BoxDecoration(
-                      color: kLightBlack,
-                      borderRadius: BorderRadius.circular(10),
-                    ),
+        child: SizedBox(
+          height: screenHeight,
+          width: screenWidth,
+          child: SingleChildScrollView(
+            child: Column(
+              children: [
+                ListTile(
+                  leading: const CircleAvatar(
+                    radius: 30,
+                  ),
+                  title: boldText(text: 'Top #293 Mates', size: 22),
+                  subtitle: regularText(
+                      text: 'Below are your latest updates.',
+                      color: kWhiteColor.withOpacity(0.7)),
+                ),
+                _upperTwoWidget(context),
+                const SizedBox(
+                  height: 20,
+                ),
+                _middleTwoWidgets(context),
+                const SizedBox(
+                  height: 20,
+                ),
+                SizedBox(
+                  height: screenHeight * 0.3,
+                  child: GestureDetector(
+                    onTap: () {
+                      nextPage(context: context, widget: const PurchasePower());
+                    },
                     child: Padding(
                       padding: const EdgeInsets.all(8.0),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceAround,
-                        children: [
-                          boldText(text: 'Purchasing\nCalculator', size: 25),
-                          Image.asset('asset/calculator.png'),
-                        ],
+                      child: Container(
+                        decoration: BoxDecoration(
+                          color: kLightBlack,
+                          borderRadius: BorderRadius.circular(10),
+                        ),
+                        child: Padding(
+                          padding: const EdgeInsets.all(8.0),
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                            children: [
+                              boldText(
+                                  text: 'Purchasing\nCalculator', size: 25),
+                              Image.asset('asset/calculator.png'),
+                            ],
+                          ),
+                        ),
                       ),
                     ),
-                  ),
-                ),
-              ),
-            )
-          ],
-        ),
-      ),
-    );
-  }
-
-  Row _middleTwoWidgets(BuildContext context) {
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.spaceAround,
-      children: [
-        Container(
-          height: 210,
-          width: MediaQuery.of(context).size.width * 0.47,
-          decoration: BoxDecoration(
-            color: kWhiteColor,
-            borderRadius: BorderRadius.circular(10),
-          ),
-          child: Padding(
-            padding: const EdgeInsets.all(12),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                regularText(
-                    text: 'Value of your assets'.toUpperCase(),
-                    size: 12,
-                    color: kBlackColor),
-                const SizedBox(
-                  height: 10,
-                ),
-                boldText(text: '\$ 250,281', size: 22, color: kBlackColor),
-                const SizedBox(
-                  height: 10,
-                ),
-                const Divider(
-                  thickness: 2,
-                ),
-                const SizedBox(
-                  height: 10,
-                ),
-                regularText(
-                    text: 'Rental Earning', size: 15, color: kBlackColor),
-                const SizedBox(
-                  height: 10,
-                ),
-                boldText(text: '\$ 80 /W', color: Colors.green),
-                const SizedBox(
-                  height: 10,
-                ),
-              ],
-            ),
-          ),
-        ),
-        Container(
-          height: 210,
-          width: MediaQuery.of(context).size.width * 0.45,
-          decoration: BoxDecoration(
-            color: kLightBlack,
-            borderRadius: BorderRadius.circular(10),
-          ),
-          child: Padding(
-            padding: const EdgeInsets.all(10),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              mainAxisAlignment: MainAxisAlignment.start,
-              children: [
-                boldText(text: 'Five-year forecast', size: 16),
-                const SizedBox(
-                  height: 10,
-                ),
-                regularText(text: 'Potential Borrowing'),
-                const SizedBox(
-                  height: 10,
-                ),
-                boldText(text: '\$ 353,000', size: 22),
-                const SizedBox(
-                  height: 10,
-                ),
-                const Divider(
-                  thickness: 2,
-                ),
-                const SizedBox(
-                  height: 10,
-                ),
-                regularText(text: 'Potential rental Profit'),
-                const SizedBox(
-                  height: 10,
-                ),
-                Container(
-                  decoration: BoxDecoration(
-                    color: kWhiteColor,
-                    borderRadius: BorderRadius.circular(10),
-                  ),
-                  child: Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: boldText(
-                        text: '\$ 20,800', size: 20, color: Colors.green),
                   ),
                 )
               ],
             ),
           ),
         ),
-      ],
+      ),
+    );
+  }
+
+  Widget _middleTwoWidgets(BuildContext context) {
+    return SizedBox(
+      height: MediaQuery.of(context).size.height * 0.36,
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceAround,
+        crossAxisAlignment: CrossAxisAlignment.stretch,
+        children: [
+          Container(
+            height: 210,
+            width: MediaQuery.of(context).size.width * 0.47,
+            decoration: BoxDecoration(
+              color: kWhiteColor,
+              borderRadius: BorderRadius.circular(10),
+            ),
+            child: Padding(
+              padding: const EdgeInsets.all(12),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                children: [
+                  regularText(
+                      text: 'Value of your assets'.toUpperCase(),
+                      size: 12,
+                      color: kBlackColor),
+                  boldText(text: '\$ 250,281', size: 22, color: kBlackColor),
+                  const Divider(
+                    thickness: 2,
+                  ),
+                  regularText(
+                      text: 'Rental Earning', size: 15, color: kBlackColor),
+                  boldText(text: '\$ 80 /W', color: Colors.green),
+                ],
+              ),
+            ),
+          ),
+          Container(
+            height: 210,
+            width: MediaQuery.of(context).size.width * 0.45,
+            decoration: BoxDecoration(
+              color: kLightBlack,
+              borderRadius: BorderRadius.circular(10),
+            ),
+            child: Padding(
+              padding: const EdgeInsets.all(10),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                children: [
+                  boldText(text: 'Five-year forecast', size: 16),
+                  regularText(text: 'Potential Borrowing'),
+                  boldText(text: '\$ 353,000', size: 22),
+                  const Divider(
+                    thickness: 2,
+                  ),
+                  regularText(text: 'Potential rental Profit'),
+                  Container(
+                    decoration: BoxDecoration(
+                      color: kWhiteColor,
+                      borderRadius: BorderRadius.circular(10),
+                    ),
+                    child: Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: boldText(
+                          text: '\$ 20,800', size: 20, color: Colors.green),
+                    ),
+                  )
+                ],
+              ),
+            ),
+          ),
+        ],
+      ),
     );
   }
 
@@ -197,14 +181,16 @@ class PurchasePowerScreen extends StatelessWidget {
                   height: 10,
                 ),
                 Container(
-                    decoration: BoxDecoration(
-                        border: Border.all(color: kWhiteColor),
-                        borderRadius: BorderRadius.circular(20)),
-                    child: Padding(
-                      padding: const EdgeInsets.symmetric(
-                          horizontal: 20, vertical: 8),
-                      child: boldText(text: 'Verified', color: Colors.green),
-                    )),
+                  decoration: BoxDecoration(
+                      border: Border.all(color: kWhiteColor),
+                      borderRadius: BorderRadius.circular(20)),
+                  child: Padding(
+                    padding:
+                        const EdgeInsets.symmetric(horizontal: 20, vertical: 8),
+                    child: boldText(
+                        text: 'Verified', color: Colors.green, size: 25),
+                  ),
+                ),
                 const SizedBox(
                   height: 10,
                 ),
@@ -231,23 +217,17 @@ class PurchasePowerScreen extends StatelessWidget {
                 children: [
                   Row(
                     crossAxisAlignment: CrossAxisAlignment.center,
-                    mainAxisAlignment: MainAxisAlignment.center,
+                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                     children: [
                       const Icon(
                         Icons.info_outline,
                         color: Colors.green,
                       ),
-                      const SizedBox(
-                        width: 5,
-                      ),
                       boldText(
                           text: 'New Alert', size: 18, color: Colors.green),
-                      const SizedBox(
-                        width: 5,
-                      ),
                       const Icon(
                         Icons.notifications,
-                        size: 25,
+                        size: 20,
                         color: Colors.green,
                       )
                     ],

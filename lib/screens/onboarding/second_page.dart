@@ -20,22 +20,24 @@ class SecondPage extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.center,
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
-            SizedBox(
-              width: MediaQuery.of(context).size.width,
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: const [
-                  Flexible(
-                    child: CenterImage(
-                      image: 'asset/man.png',
+            Flexible(
+              child: SizedBox(
+                width: MediaQuery.of(context).size.width,
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: const [
+                    Flexible(
+                      child: CenterImage(
+                        image: 'asset/man.png',
+                      ),
                     ),
-                  ),
-                  Flexible(
-                    child: CenterImage(
-                      image: 'asset/man2.png',
+                    Flexible(
+                      child: CenterImage(
+                        image: 'asset/man2.png',
+                      ),
                     ),
-                  ),
-                ],
+                  ],
+                ),
               ),
             ),
             const SizedBox(

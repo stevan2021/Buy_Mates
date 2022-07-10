@@ -63,18 +63,19 @@ class _ActivityScreenState extends State<ActivityScreen> {
         ),
         Row(
           mainAxisSize: MainAxisSize.max,
+          mainAxisAlignment: MainAxisAlignment.center,
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
             iconWithTaps(
                 icon: Icons.replay,
-                size: 25,
+                size: 20,
                 function: () {
                   /// TODO:
                 },
                 isBig: false),
             iconWithTaps(
                 icon: Icons.close,
-                size: 40,
+                size: 32,
                 function: () {
                   Provider.of<BottomNavigationProvider>(context, listen: false)
                       .changeIndex(index: 3);
@@ -90,14 +91,14 @@ class _ActivityScreenState extends State<ActivityScreen> {
             ),
             iconWithTaps(
                 icon: Icons.favorite,
-                size: 40,
+                size: 32,
                 function: () {
                   nextPage(context: context, widget: const AllocationScreen());
                 },
                 isBig: true),
             iconWithTaps(
                 icon: Icons.share,
-                size: 25,
+                size: 20,
                 function: () {
                   nextPage(context: context, widget: const ShareScreen());
                 },
@@ -107,7 +108,10 @@ class _ActivityScreenState extends State<ActivityScreen> {
         const SizedBox(
           height: 10,
         ),
-        buildLinearPercentIndicator(percent: _currentCard.funded / 100)
+        buildLinearPercentIndicator(percent: _currentCard.funded / 100),
+        const SizedBox(
+          height: 10,
+        ),
       ],
     );
   }
@@ -186,29 +190,25 @@ class _CardWithImageState extends State<CardWithImage> {
                 left: 2,
                 right: 2,
                 child: Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: List.generate(
                     3,
-                    (index) => Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 8),
-                      child: GestureDetector(
-                        onTap: () {
-                          setState(() {
-                            _imageIndex = index;
-                          });
-                        },
-                        child: Padding(
-                          padding: const EdgeInsets.symmetric(vertical: 8.0),
-                          child: Container(
-                            height: 8,
-                            width: 100,
-                            decoration: BoxDecoration(
-                              color: _imageIndex == index
-                                  ? kWhiteColor
-                                  : kCardColor,
-                              borderRadius: BorderRadius.circular(20),
-                            ),
+                    (index) => GestureDetector(
+                      onTap: () {
+                        setState(() {
+                          _imageIndex = index;
+                        });
+                      },
+                      child: Padding(
+                        padding: const EdgeInsets.symmetric(vertical: 8.0),
+                        child: Container(
+                          height: 8,
+                          width: MediaQuery.of(context).size.width * 0.28,
+                          decoration: BoxDecoration(
+                            color:
+                                _imageIndex == index ? kWhiteColor : kCardColor,
+                            borderRadius: BorderRadius.circular(20),
                           ),
                         ),
                       ),
@@ -377,14 +377,14 @@ Widget iconWithTaps(
     child: Padding(
       padding: const EdgeInsets.all(5.0),
       child: Container(
-        height: isBig ? 58 : 50,
-        width: isBig ? 58 : 50,
+          height: isBig ? 58 : 40,
+        // width: isBig ? 58 : 40,
         decoration: BoxDecoration(
           color: containerColor ?? Colors.transparent,
           border: Border.all(
             color: kBlackColor,
           ),
-          borderRadius: BorderRadius.circular(200),
+          shape: BoxShape.circle,
         ),
         child: IconButton(
           onPressed: function,

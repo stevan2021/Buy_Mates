@@ -82,7 +82,7 @@ class DescriptionScreen extends StatelessWidget {
             ],
           ),
           Positioned(
-            top: 370,
+            top: MediaQuery.of(context).size.height * 0.49,
             right: 15,
             left: 15,
             child: Row(
@@ -93,13 +93,13 @@ class DescriptionScreen extends StatelessWidget {
                 iconWithTaps(
                     containerColor: kWhiteColor,
                     icon: Icons.replay,
-                    size: 25,
+                    size: 20,
                     function: () {},
                     isBig: false),
                 iconWithTaps(
                     containerColor: kWhiteColor,
                     icon: Icons.close,
-                    size: 40,
+                    size: 32,
                     function: () {
                       Provider.of<BottomNavigationProvider>(context,
                               listen: false)
@@ -113,16 +113,18 @@ class DescriptionScreen extends StatelessWidget {
                 iconWithTaps(
                     containerColor: kWhiteColor,
                     icon: Icons.favorite,
-                    size: 40,
+                    size: 32,
                     function: () {
                       nextPage(
-                          context: context, widget: const AllocationScreen());
+                        context: context,
+                        widget: const AllocationScreen(),
+                      );
                     },
                     isBig: true),
                 iconWithTaps(
                     containerColor: kWhiteColor,
                     icon: Icons.share,
-                    size: 25,
+                    size: 20,
                     function: () {
                       nextPage(context: context, widget: const ShareScreen());
                     },

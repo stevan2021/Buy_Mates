@@ -126,21 +126,22 @@ class AssetScreen extends StatelessWidget {
                         trailing: SizedBox(
                           width: 43,
                           height: 43,
-                          child: Stack(
-                            children: [
-                              CircularProgressIndicator(
-                                color: Colors.red,
-                                backgroundColor: kCardColor,
-                                value: _listOfAsset[index].percent / 100,
-                              ),
-                              Align(
-                                alignment: Alignment.center,
-                                child: regularText(
-                                    size: 10,
-                                    text: "${_listOfAsset[index].percent}%",
-                                    color: kBlackColor),
-                              ),
-                            ],
+                          child: Center(
+                            child: Stack(
+                              children: [
+                                CircularProgressIndicator(
+                                  color: Colors.red,
+                                  backgroundColor: kCardColor,
+                                  value: _listOfAsset[index].percent / 100,
+                                ),
+                                Center(
+                                  child: regularText(
+                                      size: 10,
+                                      text: "${_listOfAsset[index].percent}%",
+                                      color: kBlackColor),
+                                ),
+                              ],
+                            ),
                           ),
                         ),
                       ),

@@ -63,7 +63,7 @@ class VerifyScreen extends StatelessWidget {
                               mainAxisSize: MainAxisSize.min,
                               mainAxisAlignment: MainAxisAlignment.center,
                               children: [
-                                Image.asset('asset/check.png'),
+                                Flexible(child: Image.asset('asset/check.png')),
                                 const SizedBox(
                                   height: 20,
                                 ),
@@ -127,13 +127,13 @@ class VerifyScreen extends StatelessWidget {
     return Stack(
       children: [
         Container(
-          height: screenHeight * 0.5,
+          height: screenHeight * 0.45,
           color: Colors.black,
         ),
         Column(
           children: [
             Container(
-              height: screenHeight * 0.42,
+              height: screenHeight * 0.38,
               color: Colors.black,
               child: SafeArea(
                 child: Align(
@@ -167,7 +167,7 @@ class VerifyScreen extends StatelessWidget {
                     ],
                   ),
                   child: Container(
-                    height: screenHeight * 0.28,
+                    height: screenHeight * 0.339,
                     color: Colors.black,
                   ),
                 ),

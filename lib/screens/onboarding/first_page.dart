@@ -21,10 +21,12 @@ class FirstPage extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.center,
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
-            SizedBox(
-              width: MediaQuery.of(context).size.width,
-              child: const CenterImage(
-                image: 'asset/home.png',
+            Flexible(
+              child: SizedBox(
+                width: MediaQuery.of(context).size.width,
+                child: const CenterImage(
+                  image: 'asset/home.png',
+                ),
               ),
             ),
             const SizedBox(
@@ -45,7 +47,7 @@ class FirstPage extends StatelessWidget {
             ),
             TextButton(
               onPressed: () {
-                nextPage(context: context, widget:  Login());
+                nextPage(context: context, widget: Login());
               },
               child: regularText(text: 'Skip', color: kBlackColor),
             ),
