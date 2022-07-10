@@ -3,7 +3,6 @@ import 'package:buy_mate/constants/color.dart';
 import 'package:buy_mate/functions/next_page.dart';
 import 'package:buy_mate/screens/login/login.dart';
 import 'package:buy_mate/screens/onboarding/second_page.dart';
-import 'package:buy_mate/screens/onboarding/third_page.dart';
 import 'package:buy_mate/widgets/bold_text.dart';
 import 'package:buy_mate/widgets/button_image.dart';
 import 'package:buy_mate/widgets/center_image.dart';
@@ -18,7 +17,7 @@ class FirstPage extends StatelessWidget {
       backgroundColor: Colors.white,
       body: SafeArea(
         child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
+          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
             Flexible(

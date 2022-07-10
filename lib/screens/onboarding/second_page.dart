@@ -17,7 +17,7 @@ class SecondPage extends StatelessWidget {
       backgroundColor: Colors.white,
       body: SafeArea(
         child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
+          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
             Flexible(
