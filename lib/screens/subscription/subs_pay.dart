@@ -23,6 +23,7 @@ class _SubsPayState extends State<SubsPay> {
         child: Padding(
           padding: const EdgeInsets.all(10),
           child: Column(
+
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
               const SizedBox(
