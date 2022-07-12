@@ -37,12 +37,16 @@ class _LoadingScreenState extends State<LoadingScreen> {
                 Expanded(
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.end,
-                    children: const [
+                    children: [
                       SizedBox(
                         height: 30,
                       ),
                       Flexible(
-                        child: CenterImage(image: 'asset/logo.png'),
+                        child: SizedBox(
+                          height: MediaQuery.of(context).size.height * 0.35,
+                          width: MediaQuery.of(context).size.width * 0.8,
+                          child: CenterImage(image: 'asset/logo.png'),
+                        ),
                       ),
                       BoldText(
                         text: 'Property Sharing solutions',
