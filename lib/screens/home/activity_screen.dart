@@ -7,6 +7,8 @@ import 'package:buy_mate/screens/home/description.dart';
 import 'package:buy_mate/screens/home/share_screen.dart';
 import 'package:buy_mate/widgets/liner_indicator.dart';
 import 'package:buy_mate/widgets/text_styles.dart';
+import 'package:flutter_swiper_view/flutter_swiper_view.dart';
+
 import 'package:provider/provider.dart';
 
 class ActivityScreen extends StatefulWidget {
@@ -35,11 +37,10 @@ class _ActivityScreenState extends State<ActivityScreen> {
           ],
           parking: 2));
 
-  late CardInfo _currentCard;
+  final int _currentCard = 0;
 
   @override
   void initState() {
-    _currentCard = _cardInfo[0];
     super.initState();
   }
 
@@ -48,16 +49,11 @@ class _ActivityScreenState extends State<ActivityScreen> {
     return Column(
       children: [
         SizedBox(
-          height: MediaQuery.of(context).size.height * 0.68,
-          child: Stack(
-            children: List.generate(
-                _cardInfo.length,
-                (index) => CardWithImage(
-                      index: index,
-                      cardInfo: _cardInfo,
-                    )).reversed.toList(),
-          ),
-        ),
+            height: MediaQuery.of(context).size.height * 0.68,
+            // CARD WITH IMAGE IS LIST OF PROPERTIES
+            child: CardWithImage(
+              cardInfo: _cardInfo[0],
+            )),
         const SizedBox(
           height: 20,
         ),
@@ -84,7 +80,7 @@ class _ActivityScreenState extends State<ActivityScreen> {
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 8),
               child: boldText(
-                  text: '${_currentCard.funded}%\nFunded',
+                  text: '${_cardInfo[_currentCard].funded}%\nFunded',
                   color: kBlackColor,
                   textAlign: TextAlign.center,
                   size: 22),
@@ -108,7 +104,8 @@ class _ActivityScreenState extends State<ActivityScreen> {
         const SizedBox(
           height: 10,
         ),
-        buildLinearPercentIndicator(percent: _currentCard.funded / 100),
+        buildLinearPercentIndicator(
+            percent: _cardInfo[_currentCard].funded / 100),
         const SizedBox(
           height: 10,
         ),
@@ -118,11 +115,9 @@ class _ActivityScreenState extends State<ActivityScreen> {
 }
 
 class CardWithImage extends StatefulWidget {
-  final List<CardInfo> cardInfo;
-  final int index;
+  final CardInfo cardInfo;
 
-  const CardWithImage({Key? key, required this.index, required this.cardInfo})
-      : super(key: key);
+  const CardWithImage({Key? key, required this.cardInfo}) : super(key: key);
 
   @override
   State<CardWithImage> createState() => _CardWithImageState();
@@ -166,49 +161,29 @@ class _CardWithImageState extends State<CardWithImage> {
     );
   }
 
+  late List<String> _images = [];
+
+  @override
+  void initState() {
+    _images = widget.cardInfo.image;
+    super.initState();
+  }
+
+  final SwiperController _swiperController = SwiperController();
+
   @override
   Widget build(BuildContext context) {
-    return SizedBox(
-      child: Padding(
-        padding: EdgeInsets.only(
-            top: widget.index == 0
-                ? 20
-                : widget.index == 1
-                    ? 10
-                    : 0),
-        child: ClipRect(
-          clipBehavior: Clip.antiAliasWithSaveLayer,
-          child: Stack(
-            fit: StackFit.expand,
-            children: [
-              GestureDetector(
-                onHorizontalDragEnd: (DragEndDetails drag) {
-                  print(drag.primaryVelocity);
-                  if (drag.primaryVelocity! < 0) {
-                    setState(() {
-                      if (_imageIndex == 0) {
-                        _imageIndex = 1;
-                      } else if (_imageIndex == 1) {
-                        _imageIndex = 2;
-                      }
-                    });
-                  } else if (drag.primaryVelocity! > 0) {
-                    setState(() {
-                      if (_imageIndex == 1) {
-                        _imageIndex = 0;
-                      } else if (_imageIndex == 2) {
-                        _imageIndex = 1;
-                      }
-                    });
-                  }
-                },
-                child: Image.asset(
-                  widget.cardInfo[widget.index].image[_imageIndex],
-                  fit: BoxFit.fill,
-                ),
-              ),
-              Positioned(
-                top: 10,
+    return ClipRect(
+      clipBehavior: Clip.antiAliasWithSaveLayer,
+      child: Stack(
+        fit: StackFit.expand,
+        children: [
+          Swiper(
+            controller: _swiperController,
+            pagination: SwiperCustomPagination(
+                builder: (BuildContext context, SwiperPluginConfig config) {
+              return Positioned(
+                top: 20,
                 left: 2,
                 right: 2,
                 child: Row(
@@ -219,7 +194,7 @@ class _CardWithImageState extends State<CardWithImage> {
                     (index) => GestureDetector(
                       onTap: () {
                         setState(() {
-                          _imageIndex = index;
+                          _swiperController.move(index);
                         });
                       },
                       child: Padding(
@@ -228,8 +203,9 @@ class _CardWithImageState extends State<CardWithImage> {
                           height: 8,
                           width: MediaQuery.of(context).size.width * 0.28,
                           decoration: BoxDecoration(
-                            color:
-                                _imageIndex == index ? kWhiteColor : kCardColor,
+                            color: config.activeIndex == index
+                                ? kWhiteColor
+                                : kCardColor,
                             borderRadius: BorderRadius.circular(20),
                           ),
                         ),
@@ -237,114 +213,134 @@ class _CardWithImageState extends State<CardWithImage> {
                     ),
                   ),
                 ),
-              ),
-              Positioned(
-                top: 30,
-                left: 5,
-                child: IconButton(
-                  onPressed: () {
-                    showBottomSheetWidget(
-                        context: context, peopleLiked: _peopleLiked);
-                  },
-                  icon: Column(
-                    children: [
-                      const Flexible(
-                        child: Icon(
-                          Icons.remove_red_eye_outlined,
-                          size: 18,
-                        ),
-                      ),
-                      regularText(
-                          text: widget.cardInfo[widget.index].likes.toString(),
-                          color: kBlackColor,
-                          size: 12)
-                    ],
-                  ),
+              );
+            }),
+            scrollDirection: Axis.horizontal,
+            itemWidth: MediaQuery.of(context).size.width * 0.98,
+            itemHeight: MediaQuery.of(context).size.height * 0.68,
+            layout: SwiperLayout.CUSTOM,
+            customLayoutOption: CustomLayoutOption(
+                startIndex: 1, stateCount: widget.cardInfo.image.length)
+              ..addOpacity([0.8, 0.8, 1])
+              ..addTranslate([
+                const Offset(0, 0),
+                const Offset(0, 10.0),
+                const Offset(0, 20.0)
+              ]),
+            itemCount: widget.cardInfo.image.length,
+            itemBuilder: (context, index) {
+              return ClipRRect(
+                clipBehavior: Clip.antiAliasWithSaveLayer,
+                child: Image.asset(
+                  widget.cardInfo.image[index],
+                  height: MediaQuery.of(context).size.height * 0.68,
+                  fit: BoxFit.fill,
+                  cacheHeight: 99999,
+                  cacheWidth: 99999,
                 ),
+              );
+            },
+          ),
+          Positioned(
+            top: 30,
+            left: 5,
+            child: IconButton(
+              onPressed: () {
+                showBottomSheetWidget(
+                    context: context, peopleLiked: _peopleLiked);
+              },
+              icon: Column(
+                children: [
+                  const Flexible(
+                    child: Icon(
+                      Icons.remove_red_eye_outlined,
+                      size: 18,
+                    ),
+                  ),
+                  regularText(
+                      text: widget.cardInfo.likes.toString(),
+                      color: kBlackColor,
+                      size: 12)
+                ],
               ),
-              Align(
-                alignment: Alignment.bottomCenter,
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.stretch,
-                  mainAxisAlignment: MainAxisAlignment.end,
+            ),
+          ),
+          Align(
+            alignment: Alignment.bottomCenter,
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.stretch,
+              mainAxisAlignment: MainAxisAlignment.end,
+              children: [
+                Row(
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    Row(
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        boldText(
-                            text:
-                                '\$ ${widget.cardInfo[widget.index].cost.toString()}',
-                            textAlign: TextAlign.center),
-                        IconButton(
-                          onPressed: () => nextPage(
-                              context: context,
-                              widget: const DescriptionScreen()),
-                          icon: const Icon(
-                            Icons.info_outline_rounded,
-                            color: kWhiteColor,
-                          ),
-                        ),
-                      ],
-                    ),
-                    Row(
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        const Icon(
-                          Icons.location_on,
-                          color: kWhiteColor,
-                          size: 15,
-                        ),
-                        regularText(
-                            text: widget.cardInfo[widget.index].location),
-                      ],
-                    ),
-                    const SizedBox(
-                      height: 10,
-                    ),
-                    Row(
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        _smallCards(
-                            text: widget.cardInfo[widget.index].bed.toString(),
-                            icon: Icons.bed_outlined),
-                        const SizedBox(
-                          width: 5,
-                        ),
-                        _smallCards(
-                            text: widget.cardInfo[widget.index].bathroom
-                                .toString(),
-                            icon: Icons.bathtub_outlined),
-                        const SizedBox(
-                          width: 5,
-                        ),
-                        _smallCards(
-                            text: widget.cardInfo[widget.index].parking
-                                .toString(),
-                            icon: Icons.car_crash_outlined),
-                      ],
-                    ),
-                    SizedBox(
-                      width: 10,
-                      height: 40,
-                      child: Center(
-                        child: regularText(
-                            text: widget.cardInfo[widget.index].text,
-                            size: 15,
-                            textAlign: TextAlign.center),
+                    boldText(
+                        text: '\$ ${widget.cardInfo.cost.toString()}',
+                        textAlign: TextAlign.center),
+                    IconButton(
+                      onPressed: () => nextPage(
+                          context: context, widget: const DescriptionScreen()),
+                      icon: const Icon(
+                        Icons.info_outline_rounded,
+                        color: kWhiteColor,
                       ),
-                    ),
-                    const SizedBox(
-                      height: 20,
                     ),
                   ],
                 ),
-              ),
-            ],
+                Row(
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    const Icon(
+                      Icons.location_on,
+                      color: kWhiteColor,
+                      size: 15,
+                    ),
+                    regularText(text: widget.cardInfo.location),
+                  ],
+                ),
+                const SizedBox(
+                  height: 10,
+                ),
+                Row(
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    _smallCards(
+                        text: widget.cardInfo.bed.toString(),
+                        icon: Icons.bed_outlined),
+                    const SizedBox(
+                      width: 5,
+                    ),
+                    _smallCards(
+                        text: widget.cardInfo.bathroom.toString(),
+                        icon: Icons.bathtub_outlined),
+                    const SizedBox(
+                      width: 5,
+                    ),
+                    _smallCards(
+                        text: widget.cardInfo.parking.toString(),
+                        icon: Icons.car_crash_outlined),
+                  ],
+                ),
+                SizedBox(
+                  width: 10,
+                  height: 40,
+                  child: Center(
+                    child: regularText(
+                        text: widget.cardInfo.text,
+                        size: 15,
+                        textAlign: TextAlign.center),
+                  ),
+                ),
+                const SizedBox(
+                  height: 20,
+                ),
+              ],
+            ),
           ),
-        ),
+        ],
       ),
     );
   }
@@ -499,3 +495,59 @@ showBottomSheetWidget(
     },
   );
 }
+
+/*
+  ...List.generate(
+                _images.length,
+                (index) => Padding(
+                      padding: EdgeInsets.only(
+                          top: index == 0
+                              ? 20
+                              : index == 1
+                                  ? 10
+                                  : 0),
+                      child: GestureDetector(
+                        onHorizontalDragEnd: (DragEndDetails drag) {
+                          // Slide left or Move next image
+                          print(drag.primaryVelocity);
+                          // List is reversed.
+                          if (drag.primaryVelocity! < 0) {
+                            print(drag.primaryVelocity);
+                            print(index);
+                            setState(() {
+                              if (_imageIndex == 0) {
+                                _imageIndex = 1;
+                                _images[0] = widget.cardInfo.image[1];
+                                _images[1] = widget.cardInfo.image[2];
+                                _images[2] = widget.cardInfo.image[0];
+                              } else if (_imageIndex == 1) {
+                                _imageIndex = 2;
+                                _images[0] = widget.cardInfo.image[2];
+                                _images[1] = widget.cardInfo.image[0];
+                                _images[2] = widget.cardInfo.image[1];
+                              }
+                            });
+                          } else if (drag.primaryVelocity! > 0) {
+                            // previous image
+                            setState(() {
+                              if (_imageIndex == 1) {
+                                _imageIndex = 0;
+                                _images[0] = widget.cardInfo.image[0];
+                                _images[1] = widget.cardInfo.image[1];
+                                _images[2] = widget.cardInfo.image[2];
+                              } else if (_imageIndex == 2) {
+                                _imageIndex = 1;
+                                _images[0] = widget.cardInfo.image[1];
+                                _images[1] = widget.cardInfo.image[0];
+                                _images[2] = widget.cardInfo.image[2];
+                              }
+                            });
+                          }
+                        },
+                        child: Image.asset(
+                          _images[index],
+                          fit: BoxFit.fill,
+                        ),
+                      ),
+                    )).reversed.toList(),
+ */
